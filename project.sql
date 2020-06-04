@@ -220,7 +220,8 @@ create table product (
 
 create table orders (
     order_id serial primary key,
-    product_id int references product(product_id)
+    product_id int references product(product_id),
+    quantity int
   );
 
 insert into users (user_name, user_email)
@@ -237,9 +238,9 @@ values
 
 insert into orders (product_id)
 values
-(1),
-(2),
-(3);
+(1, 10),
+(2 12),
+(3, 2);
 
 select *
 from product
@@ -253,15 +254,23 @@ join orders on product.product_id = orders.product_id
 group by orders.order_id;
 
 alter table orders
-add foreign key (user_id) references users(user_id);
+add user_id int references users(user_id);
+
+update orders
+set user_id = 1
+where order_id = 2;
+update orders
+set user_id = 2
+where order_id = 3;
+update orders
+set user_id = 3
+where order_id = 1;
 
 select *
 from orders
-join users on orders.user_id = users.user_id;
+where user_id = 1;
 
-select count(order_id)
+select count(order_id), user_id
 from orders
-join users on orders.user_id = users.user_id
 group by user_id;
-
 
